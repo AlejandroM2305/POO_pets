@@ -17,25 +17,21 @@ public class Venta {
         procesarVenta();
     }
 
-    private void procesarVenta(){
-        if (producto instanceof Alimento) {
-            Alimento alimento = (Alimento) producto;
-            if (alimento.estaVencido()) {
-                System.out.println("No se puede vender: el producto está vencido.");
-                return;
+    private void procesarVenta() {
+        try {
+            if (producto.verificarDisponibilidad() && cantidadVendida <= producto.getCantidad()) {
+
+                producto.reducirStock(cantidadVendida);  // Puede lanzar excepción
+
+                double total = calcularPrecioFinal();
+
+                enviarNotificacion(total);
+
+            } else {
+                System.out.println("Producto no disponible.");
             }
-        }
-        if (producto.verificarDisponibilidad() && cantidadVendida<= producto.getCantidad()){
-
-            producto.reducirStock(cantidadVendida);
-
-            double total = calcularPrecioFinal();
-
-            enviarNotificacion(total);
-
-        }
-        else {
-            System.out.println("No hay stock suficiente para procesar la venta.");
+        } catch (StockInsuficienteException e) {
+            System.out.println("ERROR DE STOCK: " + e.getMessage());
         }
     }
 

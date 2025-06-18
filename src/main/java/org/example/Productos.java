@@ -41,14 +41,12 @@ public abstract class Productos {
         return cantidad > 0;
     }
 
-    public void reducirStock (int cantidadVendida){
-        if (cantidadVendida <= cantidad){
-            cantidad = cantidad - cantidadVendida;
+    public void reducirStock(int cantidadVendida) throws StockInsuficienteException {
+        if (cantidadVendida <= cantidad) {
+            cantidad -= cantidadVendida;
+        } else {
+            throw new StockInsuficienteException("No hay suficiente stock. Quedan: " + cantidad + " unidades.");
         }
-        else{
-            System.out.println("Cantidad insuficiente para vender, quedan: " + cantidad);
-        }
-
     }
 
 
